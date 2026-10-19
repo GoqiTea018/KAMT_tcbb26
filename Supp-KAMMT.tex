@@ -1,0 +1,180 @@
+%Version 3 October 2023
+% See section 11 of the User Manual for version history
+
+%%\documentclass[sn-nature]{sn-jnl}% Style for submissions to Nature Portfolio journals
+%%\documentclass[sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+\documentclass[sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered Reference Style 
+
+
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
+\usepackage{subcaption}
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithm}%
+\usepackage{algorithmicx}%
+\usepackage{algpseudocode}%
+\usepackage{listings}%
+
+\usepackage{afterpage}
+\usepackage[right]{lineno}
+\usepackage{verbatim}
+%\usepackage{soul, color, xcolor}
+
+
+%% as per the requirement new theorem styles can be included as shown below
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}% 
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+
+\raggedbottom
+%%\unnumbered% uncomment this for unnumbered level heads
+
+\begin{document}
+\title[Article Title]{Supplementary Materials of knowledge-guided KAMMT method}
+
+
+
+\maketitle
+
+
+
+\section{Experimental setup}
+
+    
+
+    \subsection{Dataset descriptions}
+
+    \subsubsection{ADNI Dataset: Deep Synergy of Multimodal Features}
+    
+    The ADNI case serves as a standard benchmark in AD diagnosis applications.
+    
+    \begin{itemize}
+        \item \textbf{Impact of DistMult ($0.8370$, +14.5\%):} DistMult constructs a unified semantic network, enabling the model to learn structured associations such as $\text{Patient} \to \text{has\_gene} \to \text{APOE4}$ and $\text{Patient} \to \text{has\_atrophy} \to \text{Hippocampus}$. This structural regularization helps the model escape local minima, achieving a synergistic ``1+1$>$2'' effect compared to the unstable baselines.
+        \item \textbf{Enhancement by PrimeKG ($0.8632$, +2.6\%):} PrimeKG introduces a \textbf{biological inductive bias}, guiding the model to rely more on biological evidence (e.g., \texttt{Gene:APOE}) when feature conflicts arise.
+    \end{itemize}
+    
+    \subsubsection{PPMI Dataset: Conquering Heterogeneity and Optimization Instability}
+    
+    The PPMI case represents the most difficult task, serving as a prime example of the 'Baseline Collapse' phenomenon.
+    
+    \begin{itemize}
+        \item \textbf{Baseline Collapse and Non-convergence:} Consistent with the general trend, models lacking the \textcolor{blue}{KGE learning} failed to converge on PPMI, remaining trapped in suboptimal states (ACC $\approx$ 0.31). This confirms that without the topological constraints provided by the KG, raw data-driven models cannot navigate the chaotic optimization landscape of heterogeneous PD phenotypes.
+        \item \textbf{Qualitative Leap with PrimeKG ($0.8188$, AUC=$0.9634$):} PrimeKG incorporates deep pathological knowledge. For SWEDD patients (tremor present but DaTscan negative), the model leverages external knowledge relations to correct misdiagnosis, proving that knowledge guidance is a prerequisite for model convergence in high-difficulty tasks.
+    \end{itemize}
+
+\subsubsection{NACC Dataset: Addressing Sparsity}
+
+    \begin{itemize}
+        \item \textbf{Impact of DistMult ($0.7571$, +14.6\%):} Traditional methods struggle with NACC's missing data. DistMult leverages Graph Neural Networks for \textbf{Link Prediction}, inferring potential missing features based on neighbor nodes and thereby ensuring robust training even with sparse inputs.
+        \item \textbf{Enhancement by PrimeKG ($0.8080$, +5.1\%):} PrimeKG enables \textbf{symptomatology-based reasoning}, allowing the model to infer disease risk from behavioral symptoms (e.g., Agitation) even when cognitive scores are normal.
+    \end{itemize}
+
+\subsection{Experimental Setup}
+
+\begin{table}[!htb]
+\renewcommand{\arraystretch}{1.3} % 保持舒适的行高
+\centering
+\caption{Experimental Hardware and Software Configuration Parameters}
+\label{tab:env_config}
+\begin{tabular}{ll}
+\hline
+\textbf{Component} & \textbf{Specification} \\
+\hline
+Operating System        & Ubuntu 22.04 \\
+Compute Node            & Sugon Cloud East China Region 1 (Kunshan) \\
+Processor               & 1 * 7185 32C (6 cores allocated) \\
+Accelerator Card        & Heterogeneous AI Accelerator (Single Card, 64 GB VRAM) \\
+System Memory           & 115 GB \\
+Programming Language    & Python 3.10 \\
+Deep Learning Framework & PyTorch 2.4.1 \\
+Base Computing Suite    & DTK 25.04.1 \\
+Core Dependencies       & NiBabel, Pandas, Scikit-learn, NumPy, PyKeen \\
+\hline
+\end{tabular}
+\end{table}
+
+To handle the high computational demands of deep learning, we deployed our experiments on the Sugon Cloud platform. This platform provides a single heterogeneous AI accelerator card with 64 GB of VRAM. The detailed hardware and software configurations are shown in \cref{tab:env_config}.
+
+
+
+\subsection{Computational Complexity}
+
+To evaluate the efficiency of the proposed framework, we analyze both the parameter size and computational overhead across different clinical datasets. Table~\ref{tab:computational_loss} provides a direct comparison among the 3D-CNN, KAMT, and KAMP modules.
+
+\begin{table}[!htb]
+\renewcommand{\arraystretch}{1.3} % 保持 IEEE 规范的舒适行高
+\centering
+\caption{Comparison of Parameters and Computational Complexity Across Different Components}
+\label{tab:computational_loss}
+\begin{tabular}{llccc}
+\hline
+\textbf{Dataset} & \textbf{Metric} & \textbf{3D-CNN} & \textbf{KAMT} & \textbf{KAMP} \\
+\hline
+\multirow{3}{*}{\textbf{AIBL}}  & Params (M) & 8.4000 & 0.5239 & 0.8370 \\
+                                & MACs (G)   & —      & 0.0017 & 0.0109 \\
+                                & FLOPs (G)  & —      & 0.0034 & 0.0218 \\
+\hline
+\multirow{3}{*}{\textbf{PPMI}}  & Params (M) & 8.4071 & 0.3923 & 0.8369 \\
+                                & MACs (G)   & —      & 0.0031 & 0.0137 \\
+                                & FLOPs (G)  & —      & 0.0062 & 0.0274 \\
+\hline
+\multirow{3}{*}{\textbf{ADNI}}  & Params (M) & 8.4000 & 0.5933 & 0.8434 \\
+                                & MACs (G)   & —      & 0.0045 & 0.0225 \\
+                                & FLOPs (G)  & —      & 0.0090 & 0.0450 \\
+\hline
+\multirow{3}{*}{\textbf{NACC}}  & Params (M) & 8.4071 & 0.7281 & 0.9038 \\
+                                & MACs (G)   & —      & 0.0094 & 0.0238 \\
+                                & FLOPs (G)  & —      & 0.0188 & 0.0476 \\
+\hline
+\end{tabular}
+\end{table}
+
+The experimental results chemistry show that the KAMP architecture introduces a higher computational workload than the KAMT baseline. This increase is primarily due to the cross-attention mechanism used to process heterogeneous knowledge graphs, which balances diagnostic accuracy and computational cost.
+
+
+\section{Extraction of Internal Diagnostic Knowledge and CustomKG Construction}
+
+In clinical settings, primary diagnostic information is typically stored in two-dimensional relational tables. This traditional storage format hides the implicit biomedical relationships among entities, making them inaccessible to standard graph representation learning methods \cite{Rotmensch2017}. To address this limitation and establish a solid baseline, we construct a private knowledge graph named CustomKG based entirely on internal clinical records. This graph serves as a data-driven benchmark to evaluate whether incorporating external medical knowledge and optimization mechanisms is truly necessary. To capture and strengthen these latent semantic relationships, we apply a centralized topological transformation that converts the structured tabular data into sparse knowledge graph triplets.
+
+\subsection{Clinical Data Mapping and Entity Definition}
+For the preprocessed clinical dataset $\mathcal{D}_{\mathrm{clean}}$, we define the entity and relation sets by mapping the tabular structure directly into graph elements. Specifically, the unique identifier of each patient is used to construct the head entity set $\mathcal{E}_{pt}$. The feature column names are mapped to the relation set $\mathcal{R}$, while their corresponding feature values serve as the tail entity set $\mathcal{E}_{feat}$.
+
+\subsection{Interval Mapping and Dimensionality Reduction for Continuous Features}
+When processing medical records, directly treating continuous numerical values as unique terminal nodes causes an artificial explosion of the graph node space. This approach also leads to extreme graph sparsity because these numerical nodes inherently have very low degrees. To resolve this issue, we adopt an interval representation approach inspired by multi-relational data modeling \cite{bordes2013transe} and introduce a discretization binning operation $f_{\mathrm{bin}}$. By reducing dimensions through value interval mapping—such as grouping continuous ages into shared nodes spanning ten-year intervals—previously isolated patient entities become connected through a two-hop path via these shared binning nodes. This design enables feature reuse across the graph, which helps the model discover potential clinical cohort characteristics in an unsupervised manner.
+
+\subsection{Unsupervised Knowledge Graph Generation}
+During the triplet generation phase, preventing shortcut learning is essential for ensuring model robustness \cite{geirhos2020shortcut}. Therefore, we implement a strict feature avoidance strategy when building the CustomKG. We remove all final diagnostic labels and forcibly mask high-risk clinical scores, such as the Clinical Dementia Rating (CDR), from the graph structure. This step ensures that the CustomKG contains no causal diagnostic edges that directly point to pathological outcomes. The resulting unsupervised private graph is formally defined as:
+\begin{equation}
+\mathcal{G}_{\mathrm{Custom}} = \left\{ (h, r, t) \mid h \in \mathcal{E}_{pt}, r \in \mathcal{R}, t = f_{\mathrm{bin}}(v), v \in \mathcal{D}_{\mathrm{clean}} \right\}
+\label{eq:custom_kg}
+\end{equation}
+
+After shuffling the generated triplets, we split the dataset into training, validation, and testing sets using an 8:1:1 ratio, and employ DistMult for knowledge representation learning. It is worth noting that this extreme avoidance strategy is applied only to the CustomKG because it lacks the guidance of external expert knowledge. For the subsequent construction of DemRKG, we implement a more refined cleaning approach that preserves valid records (scores greater than 0) from critical scales like the CDR and Mini-Mental State Examination (MMSE). Instead of feeding these scores as plaintext, the system maps them into deep pathological priors using dynamic norm alignment. This balanced approach captures genuine clinical value while still safeguarding the model against shortcut learning.
+
+
+
+
+
+
+
+
+\end{document}

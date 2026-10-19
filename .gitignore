@@ -1,0 +1,44 @@
+# Local draw.io sources and editor backups
+*.drawio
+*.drawio.*
+*.dtmp
+
+# Local Visio drawings, stencils, templates, and editor backups
+*.vsd
+*.vsdx
+*.vsdm
+*.vss
+*.vssx
+*.vssm
+*.vst
+*.vstx
+*.vstm
+*.~vsd*
+
+# Local diagram workspaces: exports, previews, scripts, and validation records
+/figure/draw/
+/Figures/framework/
+
+# LaTeX compilation intermediates
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+*.xdv
+*.dvi
+*.loa
+*.lol
